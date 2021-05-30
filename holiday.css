@@ -1,0 +1,60 @@
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color:white;
+  }
+  
+  .flex-container > div {
+    background-color: #07e6db;
+    width: 60px;
+    margin: 10px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    font-weight: 1000;
+    font-style: oblique;
+    border-radius: 20%;
+  }
+ /*.responsive {
+    padding: 10px 6px;
+    float: left;
+    width: 20%;
+  }
+  .galary{
+    border-radius: 8px;
+  }*/
+  div.polaroid {
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 25px;
+  }
+  
+  div.container {
+    text-align: center;
+    padding: 10px 20px;
+  }
+  input[type=button] {
+    width: 100%;
+    background-color: #05476d;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=button]:hover {
+    background-color: #458ba0;
+  }
+  
+  div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  
+  
+  
