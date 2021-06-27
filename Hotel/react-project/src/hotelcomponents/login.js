@@ -1,60 +1,93 @@
 import React from 'react';
-import LoginForm from './LoginForm';
-import { connect } from 'react-redux';
-import * as actions from 'actions';
-import {Redirect} from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
-export class Login extends React.Component {
+const appStyle = {
+	height: '250px',
+  	display: 'flex'
+};
 
-    constructor(){
-        super();
+const formStyle = {
+    margin: 'auto',
+    padding: '10px',
+    border: '1px solid #c9c9c9',
+    borderRadius: '5px',
+    background: '#f5f5f5',
+    width: '220px',
+  	display: 'block'
+};
 
-        this.loginUser = this.loginUser.bind(this);
-    }
+const labelStyle = {
+    margin: '10px 0 5px 0',
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontSize: '15px',
+};
 
-    loginUser(userData){
-        this.props.dispatch(actions.login(userData));
-    }
-    render() {
+const inputStyle = {
+    margin: '5px 0 10px 0',
+    padding: '5px', 
+    border: '1px solid #bfbfbf',
+    borderRadius: '3px',
+    boxSizing: 'border-box',
+    width: '100%'
+};
 
-        const {isAuth, errors} = this.props.auth;
-        const {successRegistered} = this.props.location.state || false;
+const submitStyle = {
+    margin: '10px 0 0 0',
+    padding: '7px 10px',
+    border: '1px solid #efffff',
+    borderRadius: '3px',
+    background: '#3085d6',
+    width: '100%', 
+    fontSize: '15px',
+    color: 'white',
+    display: 'block'
+};
 
-        if(isAuth){
-            return <Redirect to={{pathname: '/rentals'}}/>
-        }
-        return (
-            <section id="login">
-                <div className="bwm-form">
-                    <div className="row">
-                        <div className="col-md-5">
-                            <h1>Login</h1>
-                            {
-                                successRegistered && 
-                                <div className="alert alert-success">
-                                    <p>You have been successfully registered. Please login now.</p>
-                                </div>
-                            }
-                            <LoginForm submitCb={this.loginUser} errors={errors}/>
-                </div>
-                        <div className="col-md-6 ml-auto">
-                            <div className="image-container">
-                                <h2 className="catchphrase">Hundreds of awesome places in reach of few clicks.</h2>
-                                <img src={process.env.PUBLIC_URL + '/img/login-image.jpg'} alt="" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+const Field = React.forwardRef(({label, type}, ref) => {
+    return (
+      <div>
+        <label style={labelStyle} >{label}</label>
+        <input ref={ref} type={type} style={inputStyle} />
+      </div>
+    );
+});
 
-        );
-    }
-}
+const Form = ({onSubmit}) => {
+    const usernameRef = React.useRef();
+    const passwordRef = React.useRef();
+    const handleSubmit = e => {
+        e.preventDefault();
+        const data = {
+            username: usernameRef.current.value,
+            password: passwordRef.current.value
+        };
+        onSubmit(data);
+    };
+    return (
+      <form style={formStyle} onSubmit={handleSubmit} >
+        <Field ref={usernameRef} label="Username:" type="text" />
+        <Field ref={passwordRef} label="Password:" type="password" />
+        <div>
+          <button style={submitStyle} type="submit">Submit</button>
+        </div>
+      </form>
+    );
+};
 
-function mapStatetoProps(state){
-    return {
-        auth: state.auth
-    }
-}
+// Usage example:
 
-export default connect(mapStatetoProps)(Login)
+const App = () => {
+    const handleSubmit = data => {
+        const json = JSON.stringify(data, null, 4);
+        console.clear();
+        console.log(json);
+    };
+    return (
+      <div style={appStyle}>
+        <Form onSubmit={handleSubmit} />
+      </div>
+    );
+};
+
+const root = document.querySelector('#root');
+ReactDOM.render(<App />, root );
