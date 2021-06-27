@@ -74,8 +74,6 @@ const Form = ({onSubmit}) => {
     );
 };
 
-// Usage example:
-
 const App = () => {
     const handleSubmit = data => {
         const json = JSON.stringify(data, null, 4);
