@@ -1,43 +1,57 @@
-import React from "react";
-import{
-    BrowserRouter as Router,
-    Redirect,
-    Route,
-    Switch,
-}from "react-router-dom";
-import Test from "./Components/Test"
-class App extends React.Component{
-    render(){
-        return(
-            <Router>
-                <div>
-                    {/*<h1>this is navbar</h1>*/}
-                    <Switch>
-                        <Route path = {"/"} exact>
-                        <h1> this is homepage </h1>
-                        </Route>
-                        <Route path = {"/login"}>
-                        <h1> this is login </h1>   
-                        </Route>
-                        <Route path = {"/signup"}>
-                        <h1> this is signup </h1>   
-                        </Route>
-                        <Route path = {"/about-us"}>This is about us
-                        </Route>
-                        <Route path = {"/contact-us"}>this is contact us</Route>
-                        <Route path = {"/404"}>
-                        <h1>page not found</h1>
-                        </Route>
-                        <Route path = {"/test"}>
-                            <Test />
-                        </Route>
-                        <Route path = {"/**"}>
-                         <Redirect to = {"/404"}/> 
-                        </Route>
-                    </Switch>
-                    {/*<h1>this is footer</h1>*/}
-                </div>
-            </Router>
-        )
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import axios from 'axios';
+
+import Login from './Login';
+import Dashboard from './Dashboard';
+import Home from './Home';
+
+import PrivateRoute from '../Utils/PrivateRoute';
+import PublicRoute from '../Utils/PublicRoute';
+import { getToken, removeUserSession, setUserSession } from '../Utils/Common';
+
+function App() {
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      return;
     }
-}export default App;
+
+    axios.get(`http://localhost:4000/verifyToken?token=${token}`).then(response => {
+      setUserSession(response.data.token, response.data.user);
+      setAuthLoading(false);
+    }).catch(error => {
+      removeUserSession();
+      setAuthLoading(false);
+    });
+  }, []);
+
+  if (authLoading && getToken()) {
+    return <div className="content">Checking Authentication...</div>
+  }
+
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <div>
+          <div className="header">
+            <NavLink exact activeClassName="active" to="/">Home</NavLink>
+            <NavLink activeClassName="active" to="/login">Login</NavLink><small>(Access without token only)</small>
+            <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink><small>(Access with token only)</small>
+          </div>
+          <div className="content">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <PublicRoute path="/login" component={Login} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+            </Switch>
+          </div>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
