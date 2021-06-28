@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { HBInput } from 'src/form/HBInput';
-import { HBResError } from 'src/form/HBResError';
-import { required, minLength4 } from 'src/form/validator';
+import { HBInput } from 'Hotel/react-project/src/forms/HBInput';
+import { HBResError } from 'Hotel/react-project/src/forms/HBResError';
+import { required, minLength4 } from 'Hotel/react-project/src/forms/validator';
 
 
 const LoginForm = props => {
